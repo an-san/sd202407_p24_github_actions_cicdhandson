@@ -12,21 +12,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: チェックアウトする
-    - uses: actions/checkout@v4
+      uses: actions/checkout@v4
 
     - name: Go の環境をセットアップする
-    - run: actions/setup-go@v5
+      run: actions/setup-go@v5
       with:
         go-version: '1.22.4'
 
     - name: フォーマットを実行する
-    - run: test -z $(gofmt -l .)
+      run: test -z $(gofmt -l .)
 
     - name: 静的解析を実行する
-    - run: go vet ./...
+      run: go vet ./...
 
     - name: テストを実行する
-    - run: go test
+      run: go test
 
     - name: ビルドを実行する
-    - run: go build .
+      run: go build .
