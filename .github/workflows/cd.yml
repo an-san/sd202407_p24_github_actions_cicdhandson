@@ -1,0 +1,34 @@
+
+name: cd
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  cd:
+    name: cd
+    runs-on: ubuntu-latest
+
+    # GitHub Actions から GitHub Container registry に対して
+    # Dcoker イメージを push するには権限が必要.
+    permissions:
+      # 下記権限は、リポジトリのコンテンツを読み取り（例：checkoutなど）を許可する.
+      contents: read
+      # GitHub Actions が GitHub Packages に書き込みを行う際は
+      # 下記の権限が必要.
+      packages: write
+
+    steps:
+    - uses: actions/checkout@v4
+    # GitHub Container registry を利用するために先ず認証する.
+    # ${{}} は GitHub Action 上で利用できる変数にアクセスする書式.
+    - name: Container registry に認証する
+      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+    - name: docker build を実行する.
+    - run: docker build -t ghcr.io/${{ github.repository }}:latest .
+
+    - name: docker image を push する.
+    - run: docker push ghcr.io/${{ github.repository }}:latest
