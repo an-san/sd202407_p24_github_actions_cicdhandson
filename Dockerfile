@@ -1,6 +1,6 @@
 
 # Go Web アプリをビルドし実行する Dockerfile.
-FROM golang:1.22.2 as builder
+FROM golang:1.22.4 as builder
 
 WORKDIR /app
 COPY go.mod go.sum ./
